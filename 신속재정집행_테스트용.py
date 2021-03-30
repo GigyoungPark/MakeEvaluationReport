@@ -5,17 +5,11 @@ from openpyxl import load_workbook
 hwp = win32.gencache.EnsureDispatch('HWPFrame.HWPObject')
 hwp.RegisterModule("FilePathCheckDLL", "FilePathCheckerModule")  # 한글파일 열 때 "접근 허용" 없애는 방법, 레지스트지에 등록해서 사용
 hwp.XHwpWindows.Item(0).Visible = True  # 작업하는 한글 파일 보이도록 하는 명령어
-hwp.Open("D://(입력)신속재정집행.hwp", "HWP", "forceopen:true")  # 보고서 작성 양식
-hwp.SaveAs("D://(결과)신속재정집행.hwp")  # 결과물은 다른 파일에 저장함
+hwp.Open("D://신속재정집행.hwp", "HWP", "forceopen:true")  # 보고서 작성 양식
+hwp.SaveAs("D://신속재정집행_결과.hwp")  # 결과물은 다른 파일에 저장함
 
 # 보고서 양식을 복사해서 기관수 만큼 한글 페이지 생성
 # (전체선택 → 복사 → 붙여넣기 → 커서를 페이지 마지막으로 이동 → 페이지 분할 →  붙여넣기 반복)
-
-# hwp 안에 필드리스트 조회하는 명령어
-# 필드는 한글 파일에 일일이 모두 셋팅해줘야 함 (누름틀 사용)
-# field_list = [i for i in hwp.GetFieldList().split('\02')]
-# print(field_list)
-# print(hwp.GetFieldList(1))
 
 hwp.Run('SelectAll')
 hwp.Run('Copy')
@@ -23,6 +17,12 @@ hwp.MovePos(3)
 for i in range(1, 159):
     hwp.Run('BreakPage')
     hwp.Run('Paste')
+
+# hwp 안에 필드리스트 조회하는 명령어
+# 필드는 한글 파일에 일일이 모두 셋팅해줘야 함 (누름틀 사용)
+# field_list = [i for i in hwp.GetFieldList().split('\02')]
+# print(field_list)
+# print(hwp.GetFieldList(1))
 
 # 엑셀 파일 읽기
 wb = load_workbook("D://신속재정집행.xlsx", read_only='True', data_only='True')
